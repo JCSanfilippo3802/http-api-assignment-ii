@@ -40,15 +40,34 @@ const notReal = (request, response) => {
 
 const notRealMeta = (request, response) => respondJSONMeta(request, response, 404);
 
-const addUser = (request, response) => {
+const addUser = (request, response, data) => {
+  
+  if(!data.name || !data.age)
+  {
+    const responseJSON = {
+      message: 'Please fill out all data fields.',
+      id: 'missingData',
+    };
+  
+    return respondJSON(request, response, 400, responseJSON);
+  }
+  
   const newUser = {
+    name: data.name,
+    age: data.age,
     // Good practice
     createdAt: Date.now(),
   };
-
-  users[newUser.createdAt] = newUser;
-
-  return respondJSON(request, response, 201, newUser);
+  
+  if(users[newUser.name]) {
+    users[newUser.name].age = data.age;
+    //Good practice
+    users[newUser.name].updatedOn = newUser.createdAt;
+    return respondJSON(request, response, 204, newUser);
+  } else {
+    users[newUser.name] = newUser;
+    return respondJSON(request, response, 201, newUser);
+  }
 };
 
 const notFound = (request, response) => {

@@ -1,5 +1,6 @@
 const http = require('http');
 const url = require('url');
+const query = require('querystring');
 
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
@@ -11,12 +12,12 @@ const urlStruct = {
     '/': htmlHandler.getIndex,
     '/favicon.ico': htmlHandler.getIndex,
     '/style.css': htmlHandler.getStyle,
-    '/getUser': jsonHandler.getUsers,
+    '/getUsers': jsonHandler.getUsers,
     '/notReal': jsonHandler.notReal,
     notFound: jsonHandler.notFound,
   },
   'HEAD': {
-    '/getUser': jsonHandler.getUsersMeta,
+    '/getUsers': jsonHandler.getUsersMeta,
     '/notReal': jsonHandler.notRealMeta,
     notFound: jsonHandler.notFoundMeta,
   },
@@ -52,11 +53,9 @@ const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
   if (request.method === 'POST') {
-    () => {
-      parseBody(request,response,urlStruct['POST'][parsedUrl.pathname]);
-    };
+    parseBody(request, response, urlStruct['POST'][parsedUrl.pathname]);
   } else {
-    urlStruct[request.method][parsedUrl.pathname](request,response);
+    urlStruct[request.method][parsedUrl.pathname](request, response);
   }
 };
 

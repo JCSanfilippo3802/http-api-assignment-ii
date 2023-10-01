@@ -5,7 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
-const handleResponse = async (response, parseResponse) => {
+    const handleResponse = async (response, parseResponse) => {
       const content = document.querySelector('#content');
 
       switch(response.status) {
@@ -14,6 +14,9 @@ const handleResponse = async (response, parseResponse) => {
           break;
         case 201:
           content.innerHTML = `<b>Created</b>`;
+          break;
+        case 204:
+          content.innerHTML = `<b>Updated</b>`;
           break;
         case 400: 
           content.innerHTML = `<b>Bad Request</b>`;
@@ -31,8 +34,6 @@ const handleResponse = async (response, parseResponse) => {
 
         let jsonString = JSON.stringify(obj);
         content.innerHTML += `<p>${jsonString}</p>`;
-      } else {
-        content.innerHTML += '<p>Meta Data Received</p>';
       }
     };
 
